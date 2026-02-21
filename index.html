@@ -3,228 +3,354 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <!-- 添加全局 referrer 设置，作为双重保险 -->
+    <meta name="referrer" content="no-referrer">
     <title>皮皮BOT</title>
     <style>
-:root {
-    --main-title-color: #ff6eb4;
-    --qq-number-color: #ff6eb4;
-    --button-bg: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-    --button-hover: linear-gradient(135deg, #ff6eb4 0%, #ff2e9f 100%);
-    --button-shadow: 0 4px 12px rgba(255, 154, 158, 0.3);
-    --button-shadow-hover: 0 6px 18px rgba(255, 154, 158, 0.5);
-    /* 新增小按钮样式变量 */
-    --small-btn-bg: linear-gradient(135deg, #f8f0bb 0%, #fce4ec 100%);
-    --small-btn-hover: linear-gradient(135deg, #ded52a 0%, #f8bbd0 100%);
-    --text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-    --border-color: rgba(255, 255, 255, 0.5);
-    --primary-color: #9b59b6;
-    --notice-top: #ff4757;
-    --notice-normal: #5a3d5a;
-}
-body { 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: url('https://api.suyanw.cn/api/ys.php') center/cover fixed;
-    color: #5a3d5a; margin: 0; padding: 20px 0; min-height: 100vh;
-}
-.content {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-    width: 85%; max-width: 900px; margin: 20px auto; text-align: center; position: relative;
-}
-h1 { color: var(--main-title-color); text-shadow: var(--text-shadow); font-size: 2em; margin-bottom: 10px; }
-h2 { color: var(--primary-color); font-size: 1.3em; margin: 30px 0 15px; }
-.logo {font-size: 3.5em; margin-bottom: 10px;}
-.desc {color: #666; font-size: 0.95em; margin-bottom: 25px; line-height: 1.6;}
-.announcement { 
-    background: rgba(255, 255, 255, 0.3); border: 1px solid var(--border-color); 
-    padding: 18px; margin: 15px auto; border-radius: 12px;
-    text-align: left; line-height: 1.7;
-}
-.notice-list {
-    width: 100%; margin: 20px 0;
-}
-.notice-item {
-    background: rgba(255, 255, 255, 0.25);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin: 12px 0;
-    text-align: left;
-    transition: all 0.3s ease;
-    cursor: default; /* 移除点击指针，原代码无showNotice绑定 */
-}
-.notice-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(31, 38, 135, 0.1);
-    background: rgba(255, 255, 255, 0.35);
-}
-.notice-item.top {
-    border-left: 4px solid var(--notice-top);
-}
-.notice-title {
-    font-weight: bold; font-size: 1.1em; margin-bottom: 15px;
-    display: flex; justify-content: space-between; align-items: center;
-}
-.top-tag {
-    background: var(--notice-top); color: #fff; font-size: 0.7em;
-    padding: 2px 8px; border-radius: 10px; font-weight: normal;
-}
-.notice-time {font-size: 0.8em; color: #999;}
-.notice-content {font-size: 0.95em; line-height: 1.8; color: var(--notice-normal);}
-.notice-empty {text-align: center; color: #999; padding: 30px 0; font-size: 0.95em;}
+        /* ------------------- 全局变量与基础设置 ------------------- */
+        :root {
+            --primary-pink: #ff7eb3;
+            --primary-purple: #8e44ad;
+            --bg-glass: rgba(255, 255, 255, 0.75);
+            --bg-glass-heavy: rgba(255, 255, 255, 0.9);
+            --shadow-soft: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 15px 35px -5px rgba(0, 0, 0, 0.15);
+            --text-main: #2c3e50;
+            --text-sub: #555;
+            --radius-box: 16px;
+            --radius-btn: 50px;
+            --anim-speed: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
 
-/* 主按钮样式 */
-.link-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 24px;
-    margin: 12px 0;
-    border-radius: 24px;
-    background: var(--button-bg);
-    color: white !important;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: var(--button-shadow);
-    font-weight: 500;
-    font-size: 0.95em;
-    border: none;
-    cursor: pointer;
-}
-.link-btn:hover {
-    background: var(--button-hover);
-    box-shadow: var(--button-shadow-hover);
-    transform: translateY(-2px);
-    color: white !important;
-    text-decoration: none;
-}
+        body { 
+            font-family: "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: url('https://api.suyanw.cn/api/ys.php') center/cover fixed;
+            color: var(--text-main);
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
 
-/* 新增：小按钮样式（尺寸更小、色调更浅） */
-.small-link-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 16px; /* 更小的内边距 */
-    margin: 0 4px;
-    border-radius: 20px; /* 更小的圆角 */
-    background: var(--small-btn-bg);
-    color: #ff6eb4 !important; /* 粉色文字，区别主按钮 */
-    text-decoration: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(255, 154, 158, 0.2);
-    font-weight: 500;
-    font-size: 0.85em; /* 更小的字体 */
-    border: none;
-    cursor: pointer;
-    vertical-align: middle; /* 关键：让按钮和文字垂直居中对齐 */
-}
-.small-link-btn:hover {
-    background: var(--small-btn-hover);
-    box-shadow: 0 4px 12px rgba(255, 154, 158, 0.3);
-    transform: translateY(-1px);
-    color: #ff4081 !important;
-    text-decoration: none;
-}
+        /* 背景遮罩 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.4) 0%, rgba(230, 230, 250, 0.4) 100%);
+            backdrop-filter: blur(5px);
+            z-index: -1;
+        }
 
-/* 按钮+文字容器 */
-.btn-text-group {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 8px 0;
-    gap: 10px; /* 替代margin-left，更适配移动端 */
-}
-/* 按钮右侧说明文字 */
-.btn-desc {
-    color: #5a3d5a; 
-    font-size: 0.9em; 
-    line-height: 1.6;
-    flex: 1; /* 文字自动占剩余宽度 */
-    min-width: 200px; /* 移动端避免文字过窄 */
-}
+        /* ------------------- 主容器 ------------------- */
+        .content {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 40px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            width: 100%; 
+            max-width: 850px; 
+            text-align: center;
+            animation: fadeIn Up 0.8s ease-out;
+        }
 
-/* 群聊提示行样式 */
-.group-tip {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0 0 10px 0;
-}
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); z-index: 10000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
-.modal-overlay.active { display: flex; opacity: 1; }
-.modal-box { background: rgba(255,255,255,0.95); width: 85%; max-width: 600px; border-radius: 25px; padding: 30px; text-align: left; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transform: scale(0.8); transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); max-height: 80vh; overflow-y: auto; }
-.modal-overlay.active .modal-box { transform: scale(1); }
-.modal-title {font-size:1.5em; color:var(--main-title-color); font-weight:bold; margin-bottom:15px; text-align:center;}
-.modal-time {text-align:center; color:#999; font-size:0.9em; margin-bottom:20px; padding-bottom:15px; border-bottom:1px solid #eee;}
-.modal-content {line-height:1.8; font-size:1em; color:#333;}
-.modal-close {
-    width: 100%; margin-top:25px; padding:12px; border-radius:50px; border:none;
-    background: linear-gradient(to right, #ff9a9e, #fecfef); color:white; font-weight:bold;
-    cursor:pointer; transition:0.2s;
-}
-.modal-close:hover {transform: translateY(-2px); filter: brightness(1.05);}
-@media (max-width:768px) {
-    .content {width:92%; padding:20px;}
-    .modal-box {width:90%; padding:20px;}
-    .btn-text-group {
-        flex-direction: column; /* 移动端按钮和文字垂直排列 */
-        align-items: flex-start;
-        gap: 5px;
-    }
-    .btn-desc {
-        min-width: unset;
-    }
-    /* 移动端小按钮适配 */
-    .small-link-btn {
-        margin: 4px 0;
-        width: auto;
-    }
-    /* 移动端群聊提示行适配 */
-    .group-tip {
-        flex-direction: row;
-        align-items: center;
-    }
-}
+        /* ------------------- Logo样式 ------------------- */
+        .logo {
+            width: 110px; 
+            height: 110px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3); 
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            background-color: #f0f0f0; /* 如果图片加载慢，显示灰色背景 */
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 { 
+            color: var(--primary-pink); 
+            font-size: 2.2em; 
+            margin: 10px 0; 
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff7eb3, #ff758c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        h2 {
+            position: relative;
+            color: var(--primary-purple);
+            font-size: 1.4em;
+            margin: 40px 0 20px;
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 50px; height: 3px;
+            background: var(--primary-pink);
+            border-radius: 2px;
+        }
+
+        .desc { color: var(--text-sub); margin-bottom: 30px; font-size: 1em; }
+
+        /* ------------------- 提示框/公告区样式 ------------------- */
+        .announcement { 
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .alert-box {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 12px 0;
+            font-size: 0.95em;
+            line-height: 1.6;
+            border-left: 5px solid transparent;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .alert-box.danger {
+            background: rgba(255, 235, 238, 0.8);
+            border-color: #ff4757;
+            color: #c0392b;
+        }
+        
+        .alert-box.success {
+            background: rgba(232, 245, 233, 0.8);
+            border-color: #2ecc71;
+            color: #27ae60;
+        }
+
+        .group-tip-card {
+            background: linear-gradient(135deg, #fff8f0 0%, #fff0f5 100%);
+            border: 2px dashed #ffb6c1;
+            border-radius: var(--radius-box);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            transition: var(--anim-speed);
+        }
+        .group-tip-card:hover {
+            transform: scale(1.01);
+            border-color: var(--primary-pink);
+            box-shadow: var(--shadow-soft);
+        }
+        .group-tip-text { flex: 1; min-width: 200px; color: #d63031; font-weight: bold; }
+
+        /* ------------------- 通知列表与功能区 ------------------- */
+        .notice-item {
+            background: #fff;
+            border-radius: var(--radius-box);
+            padding: 30px;
+            text-align: left;
+            box-shadow: var(--shadow-soft);
+            transition: var(--anim-speed);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notice-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .notice-item.top::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 6px; height: 100%;
+            background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+        }
+
+        .notice-title {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .top-tag {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: normal;
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+        }
+
+        /* ------------------- 教程步骤卡片 ------------------- */
+        .tutorial-step {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: 0.2s;
+        }
+        
+        .tutorial-step:hover {
+            background: #fff;
+            border-color: #ffcdca;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .step-content { flex: 1; }
+        .step-desc { font-size: 0.9em; color: #666; line-height: 1.6; margin-top: 5px; display: block; }
+        
+        /* ------------------- 按钮样式 ------------------- */
+        .link-btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #ff6eb4 100%);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: var(--radius-btn);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            border: none;
+        }
+        .link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5);
+            filter: brightness(1.05);
+        }
+
+        .small-link-btn {
+            background: white;
+            color: var(--primary-pink) !important;
+            border: 1px solid var(--primary-pink);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            text-decoration: none;
+            transition: 0.2s;
+            margin: 0 2px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .small-link-btn:hover {
+            background: var(--primary-pink);
+            color: white !important;
+        }
+
+        /* ------------------- 弹窗样式 ------------------- */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); 
+            z-index: 10000; display: none; align-items: center; justify-content: center; 
+            opacity: 0; transition: opacity 0.3s; 
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-box { 
+            background: #fff; width: 85%; max-width: 500px; 
+            border-radius: 20px; padding: 30px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25); 
+            transform: scale(0.9); transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-close {
+            width: 100%; margin-top: 20px; padding: 12px; border-radius: 50px; border: none;
+            background: #f1f2f6; color: #57606f; font-weight: bold; cursor: pointer;
+            transition: 0.2s;
+        }
+        .modal-close:hover { background: #dfe4ea; color: #2f3542; }
+
+        /* ------------------- 移动端适配 ------------------- */
+        @media (max-width: 768px) {
+            .content { padding: 25px 20px; width: 95%; }
+            .logo { width: 90px; height: 90px; } /* 移动端头像稍小 */
+            h1 { font-size: 1.8em; }
+            .tutorial-step { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .link-btn { width: 100%; justify-content: center; text-align: center; }
+            .group-tip-card { flex-direction: column; text-align: center; }
+            .small-link-btn { display: inline-block; margin-top: 5px; }
+        }
     </style>
 </head>
 <body>
-    <!-- 公告详情弹窗（保留，不影响页面展示） -->
+    <!-- 弹窗结构 -->
     <div class='modal-overlay' id='modal' onclick='if(event.target===this) closeModal()'>
         <div class='modal-box'>
-            <div class="modal-title" id="modalTitle"></div>
-            <div class="modal-time" id="modalTime"></div>
-            <div class="modal-content" id="modalContent"></div>
+            <div class="modal-title" id="modalTitle" style="font-size:1.2em; font-weight:bold; margin-bottom:10px; color:var(--primary-pink);"></div>
+            <div class="modal-time" id="modalTime" style="color:#999; font-size:0.8em; margin-bottom:15px;"></div>
+            <div class="modal-content" id="modalContent" style="line-height:1.6; color:#444;"></div>
             <button class="modal-close" onclick="closeModal()">关闭公告</button>
         </div>
     </div>
 
-    <!-- 主内容区 -->
+    <!-- 主内容 -->
     <div class='content'>
-        <div class="logo">🤖</div>
+        <!-- 
+           ★关键修改：添加了 referrerpolicy="no-referrer" 属性 
+           这会告诉浏览器不要告诉图片服务器你是从哪里访问的，从而绕过防盗链检测
+        -->
+        <img src="https://img.kookapp.cn/assets/2025-12/14/0qsTwKyCVk0zk0ju.png" 
+             class="logo" 
+             alt="皮皮BOT头像" 
+             referrerpolicy="no-referrer">
+        
         <h1>皮皮BOT 通知区</h1>
         <p class="desc">
             本页面为皮皮偷懒的页面，更新不一定及时如有问题联系皮皮哦
         </p>
 
         <div class='announcement'>
-            <!-- 群聊提示行：文字+按钮同行显示 -->
-            <div class="group-tip">
-                <b>📌 重要提示 联系皮皮群827027795</b>
-                <a href="https://qm.qq.com/q/zWFwYh6GIg" target="_blank" class="small-link-btn">点击加群</a>
+            <!-- 醒目的加群提示卡片 -->
+            <div class="group-tip-card">
+                <div class="group-tip-text">
+                    📌 重要提示 有疑问或拉群请加入皮皮群：827027795
+                </div>
+                <a href="https://qm.qq.com/q/zWFwYh6GIg" target="_blank" class="link-btn" style="padding: 6px 16px; font-size: 0.85em;">
+                    点击加群
+                </a>
             </div>
             
-            <p style='color: #b30000; font-size:0.95em; margin:5px 0;'>
-                代挂分为ic｛平板协议｝和nc｛pc协议｝，ic会少一点功能、请自行判断，皮皮不进行推荐
-            </p>
-            <p style='color: #008000; font-size:0.95em; margin:5px 0;'>
+            <!-- 红色警告框 -->
+            <div class="alert-box danger">
+                <b>请务必了解代挂和拉群的区别：</b><br>
+                代挂为使用自己账号登录到皮皮的后端同步皮皮的数据但是账号加群等由自行控制，<br>
+                拉群为直接将皮皮添加到群里会共享皮皮自身限制、<br>
+                代挂分为ic｛平板协议｝和nc｛pc协议｝，ic会少一点功能、请自行选择
+            </div>
+
+            <!-- 绿色提示框 -->
+            <div class="alert-box success">
+                <b>💡 使用提示：</b><br>
                 使用过程中经常会遇到掉线、风控等问题，无法扫脸解封的的请慎用<br>
-                ｛初次会很频繁，老号也频繁那就是号不行、只推荐换号或者更换协议｝
-            </p>
+                初次会比较频繁，老号也频繁那就是号不行、只推荐换号或者更换协议
+            </div>
         </div>
 
         <h2>📢 最新公告</h2>
@@ -235,31 +361,61 @@ h2 { color: var(--primary-color); font-size: 1.3em; margin: 30px 0 15px; }
                     <span class="top-tag">置顶</span>
                 </div>
                 <div class="notice-content">
-                    <div class="btn-text-group">
+                    
+                    <!-- 步骤1: IC -->
+                    <div class="tutorial-step">
                         <a href="https://icqq.pippi.top/" target="_blank" class="link-btn">
                             🔗 IC入口
                         </a>
-                        <span class="btn-desc">
-                            按照说明使用即可“需皮皮bot在线”，如登录失败例频繁可以使用 
-                            <a href="https://loginicqq.928100.xyz/" target="_blank" class="small-link-btn">tk获取地址</a>
-                        </span>
+                        <div class="step-content">
+                            <span class="step-desc">
+                                按照说明使用即可“需皮皮bot在线”，如登录失败例频繁可以使用 
+                                <a href="https://loginicqq.928100.xyz/" target="_blank" class="small-link-btn">tk获取地址</a>
+                            </span>
+                        </div>
                     </div>
-                    <p style="margin: 8px 0;">
+
+                    <!-- 补充文本 -->
+                    <div style="margin: 0 0 15px 15px; font-size: 0.9em; color: #666; border-left: 3px solid #eee; padding-left: 10px;">
                         在登录完成复制下载tk的链接打开 
                         <a href="https://ictk.pippi.top/" target="_blank" class="small-link-btn">tk上传地址</a> 
                         粘贴开始处理即可，完成重新发送登录命令
-                    </p>
-                    <div class="btn-text-group">
+                    </div>
+
+                    <!-- 步骤2: NC -->
+                    <div class="tutorial-step">
                         <a href="https://ncqq.pippi.top/" target="_blank" class="link-btn">
                             🔗 NC入口
                         </a>
-                        <span class="btn-desc">
-                            点击右下角新建nc、填入QQ静待安装完成自动刷新即可，进入控制台进行扫码登录和添加皮皮后端
-                        </span>
+                        <div class="step-content">
+                            <span class="step-desc">
+                                点击右下角新建nc、填入QQ静待安装完成自动刷新即可，进入控制台进行扫码登录和添加皮皮后端
+                            </span>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- 简单的脚本处理弹窗逻辑 -->
+    <script>
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.classList.remove('active');
+            }, 300);
+        }
+        function showModal(title, time, content) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalTime').innerText = time;
+            document.getElementById('modalContent').innerHTML = content;
+            const modal = document.getElementById('modal');
+            modal.classList.add('active');
+            setTimeout(() => modal.style.opacity = '1', 10);
+        }
+    </script>
 </body>
 </html>
