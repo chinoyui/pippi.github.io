@@ -3,7 +3,7 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <!-- 添加全局 referrer 设置，作为双重保险 -->
+    <!-- 防盗链设置 -->
     <meta name="referrer" content="no-referrer">
     <title>皮皮BOT</title>
     <style>
@@ -34,7 +34,6 @@
             justify-content: center;
         }
 
-        /* 背景遮罩 */
         body::before {
             content: '';
             position: fixed;
@@ -74,7 +73,7 @@
             animation: float 3s ease-in-out infinite;
             box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3); 
             border: 4px solid rgba(255, 255, 255, 0.8);
-            background-color: #f0f0f0; /* 如果图片加载慢，显示灰色背景 */
+            background-color: #f0f0f0; 
         }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
@@ -119,24 +118,14 @@
         .alert-box {
             padding: 15px 20px;
             border-radius: 12px;
-            margin: 12px 0;
+            margin: 20px 0 12px 0; /* 增加上间距，避免和功能区太挤 */
             font-size: 0.95em;
             line-height: 1.6;
             border-left: 5px solid transparent;
             background: rgba(255, 255, 255, 0.5);
         }
-
-        .alert-box.danger {
-            background: rgba(255, 235, 238, 0.8);
-            border-color: #ff4757;
-            color: #c0392b;
-        }
-        
-        .alert-box.success {
-            background: rgba(232, 245, 233, 0.8);
-            border-color: #2ecc71;
-            color: #27ae60;
-        }
+        .alert-box.danger { background: rgba(255, 235, 238, 0.8); border-color: #ff4757; color: #c0392b; }
+        .alert-box.success { background: rgba(232, 245, 233, 0.8); border-color: #2ecc71; color: #27ae60; }
 
         .group-tip-card {
             background: linear-gradient(135deg, #fff8f0 0%, #fff0f5 100%);
@@ -148,17 +137,14 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             transition: var(--anim-speed);
         }
-        .group-tip-card:hover {
-            transform: scale(1.01);
-            border-color: var(--primary-pink);
-            box-shadow: var(--shadow-soft);
-        }
+        .group-tip-card:hover { transform: scale(1.01); border-color: var(--primary-pink); box-shadow: var(--shadow-soft); }
         .group-tip-text { flex: 1; min-width: 200px; color: #d63031; font-weight: bold; }
 
-        /* ------------------- 通知列表与功能区 ------------------- */
+        /* ------------------- 通知列表 ------------------- */
+        .notice-list { width: 100%; }
         .notice-item {
             background: #fff;
             border-radius: var(--radius-box);
@@ -168,101 +154,117 @@
             transition: var(--anim-speed);
             position: relative;
             overflow: hidden;
+            margin-bottom: 20px;
         }
-        
-        .notice-item:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-        
+        .notice-item:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
         .notice-item.top::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 6px; height: 100%;
             background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
         }
-
         .notice-title {
-            font-size: 1.25em;
-            font-weight: 700;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
+            font-size: 1.25em; font-weight: 700; margin-bottom: 25px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid #eee; padding-bottom: 15px;
         }
-
         .top-tag {
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: normal;
-            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+            background: linear-gradient(135deg, #ff6b6b, #ff4757); color: #fff;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75em;
+            font-weight: normal; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
         }
 
-        /* ------------------- 教程步骤卡片 ------------------- */
         .tutorial-step {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #eee;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            transition: 0.2s;
+            background: #f8f9fa; border-radius: 12px; padding: 15px;
+            margin-bottom: 15px; border: 1px solid #eee;
+            display: flex; align-items: flex-start; gap: 15px; transition: 0.2s;
         }
-        
-        .tutorial-step:hover {
-            background: #fff;
-            border-color: #ffcdca;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
+        .tutorial-step:hover { background: #fff; border-color: #ffcdca; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .step-content { flex: 1; }
         .step-desc { font-size: 0.9em; color: #666; line-height: 1.6; margin-top: 5px; display: block; }
         
-        /* ------------------- 按钮样式 ------------------- */
         .link-btn {
             background: linear-gradient(135deg, #ff9a9e 0%, #ff6eb4 100%);
-            color: white !important;
-            padding: 8px 20px;
-            border-radius: var(--radius-btn);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9em;
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
-            transition: all 0.3s;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            border: none;
+            color: white !important; padding: 8px 20px; border-radius: var(--radius-btn);
+            text-decoration: none; font-weight: 600; font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3); transition: all 0.3s;
+            white-space: nowrap; display: inline-flex; align-items: center; border: none;
         }
-        .link-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5);
-            filter: brightness(1.05);
-        }
+        .link-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5); filter: brightness(1.05); }
 
         .small-link-btn {
-            background: white;
-            color: var(--primary-pink) !important;
-            border: 1px solid var(--primary-pink);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            text-decoration: none;
-            transition: 0.2s;
-            margin: 0 2px;
-            display: inline-block;
-            font-weight: bold;
+            background: white; color: var(--primary-pink) !important;
+            border: 1px solid var(--primary-pink); padding: 4px 12px;
+            border-radius: 12px; font-size: 0.8em; text-decoration: none;
+            transition: 0.2s; margin: 0 2px; display: inline-block; font-weight: bold;
         }
-        .small-link-btn:hover {
-            background: var(--primary-pink);
-            color: white !important;
+        .small-link-btn:hover { background: var(--primary-pink); color: white !important; }
+
+        /* ------------------- 功能展示区样式 ------------------- */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin: 10px 0 25px 0; /* 调整间距 */
+            text-align: left;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            background: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-color: var(--primary-pink);
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            flex-shrink: 0;
+            color: var(--primary-purple);
+        }
+
+        .feature-info { flex: 1; }
+
+        .feature-title {
+            font-weight: bold;
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .feature-desc {
+            font-size: 0.85em;
+            color: #777;
+            line-height: 1.4;
+        }
+        
+        /* 中间小标题 */
+        .section-mini-title {
+            font-size: 1.1em;
+            color: var(--primary-purple);
+            font-weight: bold;
+            margin: 0 0 10px 5px;
+            display: block;
         }
 
         /* ------------------- 弹窗样式 ------------------- */
@@ -287,15 +289,17 @@
         }
         .modal-close:hover { background: #dfe4ea; color: #2f3542; }
 
-        /* ------------------- 移动端适配 ------------------- */
+        /* 移动端适配 */
         @media (max-width: 768px) {
             .content { padding: 25px 20px; width: 95%; }
-            .logo { width: 90px; height: 90px; } /* 移动端头像稍小 */
+            .logo { width: 90px; height: 90px; }
             h1 { font-size: 1.8em; }
             .tutorial-step { flex-direction: column; align-items: flex-start; gap: 10px; }
             .link-btn { width: 100%; justify-content: center; text-align: center; }
             .group-tip-card { flex-direction: column; text-align: center; }
             .small-link-btn { display: inline-block; margin-top: 5px; }
+            /* 手机端展示功能展示单列 */
+            .feature-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -312,10 +316,6 @@
 
     <!-- 主内容 -->
     <div class='content'>
-        <!-- 
-           ★关键修改：添加了 referrerpolicy="no-referrer" 属性 
-           这会告诉浏览器不要告诉图片服务器你是从哪里访问的，从而绕过防盗链检测
-        -->
         <img src="https://img.kookapp.cn/assets/2025-12/14/0qsTwKyCVk0zk0ju.png" 
              class="logo" 
              alt="皮皮BOT头像" 
@@ -326,8 +326,10 @@
             本页面为皮皮偷懒的页面，更新不一定及时如有问题联系皮皮哦
         </p>
 
+        <!-- 提示/功能/警告 综合区域 -->
         <div class='announcement'>
-            <!-- 醒目的加群提示卡片 -->
+            
+            <!-- 1. 加群提示 -->
             <div class="group-tip-card">
                 <div class="group-tip-text">
                     📌 重要提示 有疑问或拉群请加入皮皮群：827027795
@@ -336,8 +338,48 @@
                     点击加群
                 </a>
             </div>
+
+            <!-- 2. 功能展示区 (已移动到此处) -->
+            <span class="section-mini-title">✨ 部分功能</span>
+            <div class="feature-grid">
+                <!-- 功能1 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-info">
+                        <div class="feature-title">简易群管助手</div>
+                        <div class="feature-desc">自定义入群欢迎、违禁词检测</div>
+                    </div>
+                </div>
+
+                <!-- 功能2 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🗡️</div>
+                    <div class="feature-info">
+                        <div class="feature-title">游戏攻略</div>
+                        <div class="feature-desc">鸣潮、终末地、米游辅助面板插件</div>
+                    </div>
+                </div>
+                
+                <!-- 功能3 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🎲</div>
+                    <div class="feature-info">
+                        <div class="feature-title">娱乐互动</div>
+                        <div class="feature-desc">meme表情合成、点歌、签到运势、等</div>
+                    </div>
+                </div>
+
+                <!-- 功能5 -->
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-info">
+                        <div class="feature-title">AI</div>
+                        <div class="feature-desc">支持对话、绘图｛不固定维护｝</div>
+                    </div>
+                </div>
+            </div>
             
-            <!-- 红色警告框 -->
+            <!-- 3. 警告和提示 -->
             <div class="alert-box danger">
                 <b>请务必了解代挂和拉群的区别：</b><br>
                 代挂为使用自己账号登录到皮皮的后端同步皮皮的数据但是账号加群等由自行控制，<br>
@@ -345,7 +387,6 @@
                 代挂分为ic｛平板协议｝和nc｛pc协议｝，ic会少一点功能、请自行选择
             </div>
 
-            <!-- 绿色提示框 -->
             <div class="alert-box success">
                 <b>💡 使用提示：</b><br>
                 使用过程中经常会遇到掉线、风控等问题，无法扫脸解封的的请慎用<br>
@@ -361,8 +402,6 @@
                     <span class="top-tag">置顶</span>
                 </div>
                 <div class="notice-content">
-                    
-                    <!-- 步骤1: IC -->
                     <div class="tutorial-step">
                         <a href="https://icqq.pippi.top/" target="_blank" class="link-btn">
                             🔗 IC入口
@@ -375,14 +414,12 @@
                         </div>
                     </div>
 
-                    <!-- 补充文本 -->
                     <div style="margin: 0 0 15px 15px; font-size: 0.9em; color: #666; border-left: 3px solid #eee; padding-left: 10px;">
                         在登录完成复制下载tk的链接打开 
                         <a href="https://ictk.pippi.top/" target="_blank" class="small-link-btn">tk上传地址</a> 
                         粘贴开始处理即可，完成重新发送登录命令
                     </div>
 
-                    <!-- 步骤2: NC -->
                     <div class="tutorial-step">
                         <a href="https://ncqq.pippi.top/" target="_blank" class="link-btn">
                             🔗 NC入口
@@ -393,13 +430,11 @@
                             </span>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 简单的脚本处理弹窗逻辑 -->
     <script>
         function closeModal() {
             const modal = document.getElementById('modal');
